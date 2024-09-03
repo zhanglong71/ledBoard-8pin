@@ -239,16 +239,14 @@ typedef struct {
     u8 green;
     u8 blue;
     u8 tim;
-    msgType_t msg;
-} Quintuple_u8u8u8u8Msg_t;
-
-typedef struct {
-    u8 red;
-    u8 green;
-    u8 blue;
-    u8 tim;
     paction_t_0 paction;
 } Quintuple_u8u8u8u8u8ptr_t;
+
+typedef struct {
+    u8 colorIdx;
+    Quadruple_u8u8u8u8_t color;
+    paction_t_0 paction;
+} Color2action_t;
 /*******************************************************************************/
 
 /*******************************************************************************/

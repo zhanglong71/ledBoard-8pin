@@ -80,13 +80,15 @@ int sysProcess(void *pMsg)
             if (Mget_bit(color_flag, 1) && Mget_bit(color_flag, 2) && Mget_bit(color_flag, 3) && Mget_bit(color_flag, 4)) {
                 if ((red <= 250) && (green <= 250) && (blue <= 250)) {
                     #if 1
-                    Quadruple_u8u8u8u8_t light;
-                    light.red = red;
-                    light.green = green;
-                    light.blue = blue;
-                    light.tim = tim;
-                    ledRGB2msg(&light);
-                    
+                    Quadruple_u8u8u8u8_t color;
+                    u8 colorIdx;
+                    color.red = red;
+                    color.green = green;
+                    color.blue = blue;
+                    color.tim = tim;
+                    if (ledRGB2msg(&color, &colorIdx) == POK) {
+                        g_componentStatus.ledStatus = colorIdx;
+                    }
                     #endif
                     generateLedDispAckOk(KVarr[src_idx].key);
                 } else {

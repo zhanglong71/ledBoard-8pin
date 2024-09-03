@@ -111,7 +111,7 @@ void generateLedDispAckErr(char* to)
 }
 
 /**********************************************************************************************/
-void rgb2ActAllLedOff(void)
+void rgb2ActLedAllOff(void)
 {
     msg_t msg;
     msg.msgType = CMSG_LEDALLOFF;
@@ -164,6 +164,43 @@ void rgb2ActLedChargeStop(void)
     g_componentStatus.charge = CINDEX_UNCHARGED;
 }
 
+void rgb2ActLedBattery0Level(void)
+{
+    msg_t msg;
+    msg.msgType = CMSG_LEDCHARGESTOP;
+    msgq_in_irq(&g_msgq, &msg);
+
+    g_componentStatus.charge = CINDEX_UNCHARGED;
+}
+void rgb2ActLedBattery1Level(void)
+{
+    msg_t msg;
+    msg.msgType = CMSG_LEDCHARGESTOP;
+    msgq_in_irq(&g_msgq, &msg);
+
+    g_componentStatus.charge = CINDEX_UNCHARGED;
+}
+
+void rgb2ActLedBattery2Level(void)
+{
+    msg_t msg;
+    msg.msgType = CMSG_LEDCHARGESTOP;
+    msgq_in_irq(&g_msgq, &msg);
+
+    g_componentStatus.charge = CINDEX_UNCHARGED;
+}
+
+void rgb2ActLedBattery3Level(void)
+{
+    msg_t msg;
+    msg.msgType = CMSG_LEDCHARGESTOP;
+    msgq_in_irq(&g_msgq, &msg);
+
+    g_componentStatus.charge = CINDEX_UNCHARGED;
+    // g_led_display.level = color->green;
+}
+
+#if 0
 Quintuple_u8u8u8u8u8ptr_t rgbtim2ActArr[] = {
  /** red,  green, blue, time **/
     {0,   200,   0,    0,  rgb2ActLedStandard},       // standard, charge complete
@@ -175,71 +212,38 @@ Quintuple_u8u8u8u8u8ptr_t rgbtim2ActArr[] = {
     {0,   0,     0,    0,  rgb2ActAllLedOff},         // all Led off
     {200, 0,     0,    50, rgb2ActLedFault},          // fault
 };
+#endif
 
-void ledRGB2msg(Quadruple_u8u8u8u8_t *color)
-{
-    int idx;
-    for (idx = 0; idx < MTABSIZE(rgbtim2ActArr); idx++) {
-        if ((rgbtim2ActArr[idx].red == color->red) &&
-            (rgbtim2ActArr[idx].green == color->green) &&
-            (rgbtim2ActArr[idx].blue == color->blue) &&
-            (rgbtim2ActArr[idx].tim == color->tim)) {
-            rgbtim2ActArr[idx].paction();
-            return;
-        }
-    }
-
-    for (idx = 0; idx < MTABSIZE(rgbtim2ActArr); idx++) {
-        if (rgbtim2ActArr[idx].tim == color->tim) {
-            if (color->tim == 1) {  // 特殊处理
-                g_led_display.level = color->green;  // !!!!!!!!!!!!!!
-                rgbtim2ActArr[idx].paction();
-                return;
-            }
-        }
-    }
-    
-    return;
-}
-
-#if 0
-Quintuple_u8u8u8u8Msg_t rgbtim2msgArr[] = {
-/** red,  green, blue, time **/
-    {0,   0,     0,    0,  CMSG_LEDALLOFF},     // all Led off
-    {200, 0,     0,    50, CMSG_LEDFAULT},      // fault
-    {0,   200,   0,    0,  CMSG_LEDSTANDARD},   // standard, charge complete
-    {0,   100,   0,    0,  CMSG_LEDHIGHPOWER},  // high power
-    {0,   200,   0,    5,  CMSG_LEDCHARGEING},  // charging
-    {200, 0,     200,  5,  CMSG_LEDCLEAN},      // clean
-    {0,   0,     0,    1,  CMSG_LEDCHARGESTOP}, // charge stop(display volate level)
+Color2action_t rgbtim2ActArr[] = {
+ /** red,  green, blue, time **/
+    {CCOLOR_STANDARD,      {0,   200,   0,    0},  rgb2ActLedStandard},       // standard, charge complete
+    {CCOLOR_HIGHPOWER,     {0,   100,   0,    0},  rgb2ActLedHighPower},      // high power
+    {CCOLOR_CHARGING,      {0,   250,   0,    5},  rgb2ActLedCharging},       // charging
+    {CCOLOR_CHARGING2,     {0,   200,   0,    5},  rgb2ActLedCharging},       // charging
+    {CCOLOR_CLEAN,         {200, 0,     200,  5},  rgb2ActLedClean},          // clean
+    {CCOLOR_BATTERY0LEVEL, {0,   0,     0,    1},  rgb2ActLedBattery0Level},     // charge stop(display 0 level)
+    {CCOLOR_BATTERY1LEVEL, {0,   1,     0,    1},  rgb2ActLedBattery1Level},     // charge stop(display 1 level)
+    {CCOLOR_BATTERY2LEVEL, {0,   2,     0,    1},  rgb2ActLedBattery2Level},     // charge stop(display 2 level)
+    {CCOLOR_BATTERY3LEVEL, {0,   3,     0,    1},  rgb2ActLedBattery3Level},  // charge stop(display 3 level)
+    {CCOLOR_ALLOFF,        {0,   0,     0,    0},  rgb2ActLedAllOff},         // all Led off
+    {CCOLOR_FAULT,         {200, 0,     0,    50}, rgb2ActLedFault},          // fault
 };
 
-RetStatus ledRGBtim2msg(Quadruple_u8u8u8u8_t *color, msg_t* msg)
+RetStatus ledRGB2msg(Quadruple_u8u8u8u8_t *color, u8* colorIdx)
 {
     int idx;
-    for (idx = 0; idx < MTABSIZE(rgbtim2msgArr); idx++) {
-        if ((rgbtim2msgArr[idx].red == color->red) &&
-            (rgbtim2msgArr[idx].green == color->green) &&
-            (rgbtim2msgArr[idx].blue == color->blue) &&
-            (rgbtim2msgArr[idx].tim == color->tim)) {
-            msg->msgType = rgbtim2msgArr[idx].msg;
+    for (idx = 0; idx < MTABSIZE(rgbtim2ActArr); idx++) {
+        if ((rgbtim2ActArr[idx].color.red == color->red) &&
+            (rgbtim2ActArr[idx].color.green == color->green) &&
+            (rgbtim2ActArr[idx].color.blue == color->blue) &&
+            (rgbtim2ActArr[idx].color.tim == color->tim)) {
+            rgbtim2ActArr[idx].paction();
+            *colorIdx = rgbtim2ActArr[idx].colorIdx;
             return POK;
         }
     }
-
-    for (idx = 0; idx < MTABSIZE(rgbtim2msgArr); idx++) {
-        if (rgbtim2msgArr[idx].tim == color->tim) {
-            if (color->tim == 1) {  // 特殊处理
-                msg->msgType = rgbtim2msgArr[idx].msg;
-                g_led_display.level = color->green;
-                return POK;
-            }
-        }
-    }
-    
     return PERROR;
 }
-#endif
 
 u8 batteryVoltage2percent(void)
 {

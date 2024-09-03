@@ -68,6 +68,19 @@
 #define CINDEX_CHARGEFAULT            (19)
 #define CINDEX_CHARGEREPAIR           (20)
 /*******************************************************************************/
+#define CCOLOR_NONE                (0)
+#define CCOLOR_ALLOFF              (1)
+#define CCOLOR_STANDARD            (2)
+#define CCOLOR_HIGHPOWER           (3)
+#define CCOLOR_CHARGING            (4)
+#define CCOLOR_CHARGING2           (5)
+#define CCOLOR_CLEAN               (6)
+#define CCOLOR_BATTERY0LEVEL       (7)
+#define CCOLOR_BATTERY1LEVEL       (8)
+#define CCOLOR_BATTERY2LEVEL       (9)
+#define CCOLOR_BATTERY3LEVEL       (10)
+#define CCOLOR_FAULT               (11)
+/*******************************************************************************/
 #define CCR4_Val (40961)
 #define CCR3_Val (27309)
 //#define CCR2_Val (350)  // 17.11KHz

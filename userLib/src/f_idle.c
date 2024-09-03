@@ -37,6 +37,10 @@ int f_idle(void *pMsg)
                 } else if (tmp == 4) {
                     dispBatteryLevel(g_led_display.level);
                 }
+            } else {
+                if (g_componentStatus.ledStatus == CCOLOR_ALLOFF) {
+                    ledAlloff();
+                }
             }
         }
         break;

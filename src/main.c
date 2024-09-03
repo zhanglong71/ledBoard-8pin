@@ -88,6 +88,7 @@ LedDisp_t g_led_display;    // for led charging display
 ComponentField_t g_componentStatus = {
     .bat_v                = 0,
     .charge               = CINDEX_UNCHARGED,
+    .ledStatus            = CCOLOR_NONE,
 };
 /******************************************************************************/
 
