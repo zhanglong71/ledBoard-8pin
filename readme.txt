@@ -23,3 +23,10 @@
                   5.充电模式 led6,7,8（R0, G200, B0, TIM5）【保持原来的】
                   6.电量显示 led6,7,8（R0, G1/2/3, B0, TIM1）【新增】
 具体实现见 rgbtim2msgArr[]对应函数指针里的消息
+2024/9/4 14:05:06 整理充电状态指示(见ledAnimationArr[]数组)；idle场景定时查询电池电量，对应调整显示
+                  NONE/nothing-无任何动作, 
+                  INIT/blink-不确定状态下闪烁, 
+                  OFF/-灯光灭, 
+                  LEVEL/level-电量显示, 
+                  Blink低电指示, 
+                  ANIMATION充电指示)

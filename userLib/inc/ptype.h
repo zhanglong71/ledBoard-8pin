@@ -93,7 +93,7 @@ typedef enum {
     CLED_OVER,      /** LED display **/
 
     CMSG_LEDALLOFF,     /** all led off **/
-    CMSG_LEDACTOFF,     /** fault,standard,highpower,clean led off **/
+    CMSG_LEDACTOFF,     /** fault,standard,highpower,clean led off(backgroud/batteryLevel remain) **/
     CMSG_LEDFAULT,      /** fault director**/
     CMSG_LEDSTANDARD,   /** standard mode director**/
     CMSG_LEDHIGHPOWER,  /** highpower mode director**/
@@ -127,20 +127,6 @@ typedef struct jsonTL_s {
     void* arg; /** 收到对应命令的响应动作 或 其它 **/
 }jsonTL_t;
 
-#if 0
-typedef struct {
-	void *var1;
-    void *var2;
-}pair_t;
-
-typedef struct {
-	u8 red;
-    u8 green;
-    u8 blue;
-    u8 __pad;
-}color_t;
-#endif
-
 typedef struct u8Data_s{
 	u8 u8Val;
 } u8Data_t;
@@ -167,6 +153,7 @@ typedef struct {
 
     u16 tick;
     u8 level;
+    u8 status;
 } LedDisp_t;
 
 #if 1
@@ -227,6 +214,11 @@ typedef struct actionQueue_s {
 } actionQueue_t;
 #endif
 /*******************************************************************************/
+typedef struct {
+    u8 actionIdx;
+    paction_t_0 paction;
+} Pair_u8u8ptr_t;
+
 typedef struct {
     u8 red;
     u8 green;

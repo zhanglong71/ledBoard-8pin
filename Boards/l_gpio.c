@@ -8,27 +8,6 @@
 
 void GPIO_initVOPPort(void)
 {
-#if 0
-  GPIO_InitTypeDef GPIO_InitStructure;
-  /* GPIOD Periph clock enable */
-  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOD, ENABLE);
-
-  /* Configure PD02() in output pushpull mode */
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-  GPIO_Init(GPIOD, &GPIO_InitStructure);
-    
-  /* Configure PD03(5V_EN) in output pushpull mode */
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
-  GPIO_Init(GPIOD, &GPIO_InitStructure);
-
-  GPIO_SetBits(GPIOD, GPIO_Pin_2);
-  GPIO_ResetBits(GPIOD, GPIO_Pin_3);
-#endif
 }
 
 void GPIO_init485(void)
@@ -261,8 +240,11 @@ paction_t_0 chargingArr_step1[] = {
     charging_3_0,
     charging_3_3,
 };
+void doNothing(void)
+{
+}
 
-void charging_animation_blink(void)
+void charging_blink(void)
 {
     int static step = 0;
     step++;
@@ -277,16 +259,18 @@ paction_t_0 chargingArr_step2[] = {
     charging_3_3,
 };
 
-void charging_animation_step2(void)
+void charging_animation(void)
 {
     int static step = 0;
+    chargingArr_step2[step]();
     step++;
     step &= 0x3;
-    chargingArr_step2[step]();
 }
 
-void dispBatteryLevel(u8 _level)
+void dispBatteryLevel(void)
 {
+     u8 _level = g_led_display.level;
+
      if (_level > 3) {
         _level = 3;
      }
@@ -294,217 +278,9 @@ void dispBatteryLevel(u8 _level)
 }
 
 /*************************************************************************/
-
-/*************************************************************************/
-#if 0
-static void GPIO_bit0(void)
-{
-    GPIOC->BSRR = GPIO_Pin_5; /** GPIO_SetBits(GPIOC, GPIO_Pin_5); **/
-    NOP();
-    NOP();
-    
-    GPIOC->BRR = GPIO_Pin_5;  /** GPIO_ResetBits(GPIOC, GPIO_Pin_5); **/
-}
-
-static void GPIO_bit1(void)
-{
-    GPIOC->BSRR = GPIO_Pin_5;  /** GPIO_SetBits(GPIOC, GPIO_Pin_5); **/
-    NOP();
-    NOP();
-    NOP();
-    NOP();
-    NOP();
-    NOP();
-    NOP();
-    NOP();
-    NOP();
-    NOP();
-    NOP();
-    NOP();
-    NOP();
-    NOP();
-    
-    GPIOC->BRR = GPIO_Pin_5;   /** GPIO_ResetBits(GPIOC, GPIO_Pin_5); **/
-    
-}
-
-const paction_t_0 colorArr[] = {
-        GPIO_bit1,
-        GPIO_bit0,
-    };
-
-void LED_display(u32 __color)
-{
-   IRQ_disable();
-
-   colorArr[!(__color & (1 << 23))]();
-   colorArr[!(__color & (1 << 22))]();
-   colorArr[!(__color & (1 << 21))]();
-   colorArr[!(__color & (1 << 20))]();
-   colorArr[!(__color & (1 << 19))]();
-   colorArr[!(__color & (1 << 18))]();
-   colorArr[!(__color & (1 << 17))]();
-   colorArr[!(__color & (1 << 16))]();
-   colorArr[!(__color & (1 << 15))]();
-   colorArr[!(__color & (1 << 14))]();
-   colorArr[!(__color & (1 << 13))]();
-   colorArr[!(__color & (1 << 12))]();
-   colorArr[!(__color & (1 << 11))]();
-   colorArr[!(__color & (1 << 10))]();
-   colorArr[!(__color & (1 << 9))]();
-   colorArr[!(__color & (1 << 8))]();
-   colorArr[!(__color & (1 << 7))]();
-   colorArr[!(__color & (1 << 6))]();
-   colorArr[!(__color & (1 << 5))]();
-   colorArr[!(__color & (1 << 4))]();
-   colorArr[!(__color & (1 << 3))]();
-   colorArr[!(__color & (1 << 2))]();
-   colorArr[!(__color & (1 << 1))]();
-   colorArr[!(__color & (1))]();
-   
-   IRQ_enable();
-}
-#endif
-
-#if 0
-/*************************************************************************
- * color value
- *************************************************************************/
-u8 const led_depth_tab[] = {
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    12,
-    15,
-    19,
-    24,
-    30,
-    37,
-    45,
-    54,
-    64,
-    75,
-    87,
-    100,
-    114,
-    129,
-    145,
-    162,
-    180,
-    199,
-    219,
-    240,
-    250,
-
-    240,
-    219,
-    199,
-    180,
-    162,
-    145,
-    129,
-    114,
-    100,
-    87,
-    75,
-    64,
-    54,
-    45,
-    37,
-    30,
-    24,
-    19,
-    15,
-    //12,
-    10,
-    //9,
-    //8,
-    7,
-    //6,
-    //5,
-    4,
-    //3,
-    //2,
-    //1,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-};
-u8 getColorDepth(void)
-{
-    u8 static color_depth_index = 0;
-    color_depth_index++;
-    if (color_depth_index >= MTABSIZE(led_depth_tab)) {
-        color_depth_index = 0;
-    }
-    return led_depth_tab[color_depth_index];
-}
-#endif
-
-#if 0
-u8 getBlinkOnOff(void)
-{
-    u8 const led_onOff_tab[] = {
-        250,
-        0,
-    };
-    u8 static color_onOff_index = 0;
-    color_onOff_index++;
-    if (color_onOff_index >= MTABSIZE(led_onOff_tab)) {
-        color_onOff_index = 0;
-    }
-    return led_onOff_tab[color_onOff_index];
-}
-#endif
-
-/*************************************************************************/
 void ledChargeinit(void)
 {
-#if 1
+    g_led_display.status = CLED_BATLEVEL_NONE;
     g_led_display.level = 0;
     g_led_display.tick = 0;
 
@@ -513,33 +289,54 @@ void ledChargeinit(void)
     g_led_display.overMsgType = CLED_OVER;
 
     ClrTimer_irq(g_led_display.ptimer);
-#endif
 }
+
+Pair_u8u8ptr_t ledAnimationArr[] = {
+    {CLED_BATLEVEL_NONE,      doNothing},           // nothing
+    {CLED_BATLEVEL_INIT,      charging_blink},      // init
+    {CLED_BATLEVEL_OFF,       charging_3_0},        // led off
+    {CLED_BATLEVEL_LEVEL,     dispBatteryLevel},    // battery level
+    {CLED_BATLEVEL_BLINK,     charging_blink},      // battery low
+    {CLED_BATLEVEL_ANIMATION, charging_animation},  // charging
+};
 
 void ledChargeProcess(void)
 {
     ClrTimer_irq(g_led_display.ptimer);
-    charging_animation_step2();
 
-    SetTimer_irq(g_led_display.ptimer, g_led_display.tick, g_led_display.stepMsgType);
-}
-
-void ledChargeStart(u16 _tick)
-{
-    ClrTimer_irq(g_led_display.ptimer);
-    if (_tick < TIMER_200MS) {
-        g_led_display.tick = TIMER_200MS;
-    } else {
-        g_led_display.tick = _tick;   // set period
+    for(int i = 0; i < MTABSIZE(ledAnimationArr); i++) {
+        if (ledAnimationArr[i].actionIdx == g_led_display.status) {
+            ledAnimationArr[i].paction();
+            break;
+        }
     }
-    charging_3_3();
+
     SetTimer_irq(g_led_display.ptimer, g_led_display.tick, g_led_display.stepMsgType);
 }
 
+void ledChargeStatus_set(u8 _status)
+{
+    if (g_led_display.status == _status) {
+        return;
+    }
+    
+    ClrTimer_irq(g_led_display.ptimer);
+    g_led_display.status = _status;
+    if (_status == CLED_BATLEVEL_LEVEL) {
+        // g_led_display.tick = TIMER_10SEC;
+        g_led_display.tick = TIMER_400MS;   // ?????????
+    } else {
+        g_led_display.tick = TIMER_400MS;
+    }
+    
+    // charging_3_3();
+    SetTimer_irq(g_led_display.ptimer, TIMER_20MS, g_led_display.stepMsgType);
+}
+
+#if 0
 void ledChargeStop(void)
 {
-    // g_led_display.color = 0;   // mask
-    g_led_display.tick = 0;
-    ClrTimer_irq(g_led_display.ptimer);
+    ledChargeStatus_set(CLED_BATLEVEL_LEVEL);
 }
+#endif
 

@@ -135,7 +135,6 @@ void UART1_IRQHandler(void)
 
         if(u8FIFOout(rs485transX.pfifo, &u8data) == TRUE) {
            UART1->TDR = u8data.u8Val;
-            
         }
 		else
 		{
@@ -183,27 +182,7 @@ void UART2_IRQHandler(void)
         msg.msgType = CMSG_UART2RX;     /** message CMSG_UART3RX **/
         msgq_in(&g_msgq, &msg);
     #endif
-    #if 0  	
-    /* receive data */
-    Uart2Rx.Data[Uart2Rx.Index++] = UART_ReceiveData(UART2);
-		
-		if( Uart2Rx.Index == 1 )
-		{
-			UART_ITConfig(UART2, UART_IT_IDLE, ENABLE);
-		}
-		#endif
-	}
 
-  #if 0  	
-	if(UART_GetITStatus(UART2, UART_IT_IDLE) != RESET)
-	{
-		UART_ClearITPendingBit(UART2, UART_IT_IDLE);
-		UART_ITConfig(UART2, UART_IT_IDLE, DISABLE);
-		Uart2Rx.Len = Uart2Rx.Index;
-		Uart2Rx.Index = 0;
-		Uart2Rx.FinishedFlag = SET;
-	}
-	#endif
 }
 
 /**

@@ -24,7 +24,6 @@ static int isActionQueEmpty(actionQueue_t *q)
  *******************************************************************************/
 static int isActionQueFull(actionQueue_t *q)
 {
-    // if((q->tail + 1 == q->head) || (((q->tail + 1) % (ACTIONQUEUESIZE)) == q->head)) {
     if(((q->tail + 1) == q->head) || (((q->tail + 1) % (MTABSIZE(q->buf))) == q->head)) {
         return TRUE;
     }
@@ -45,7 +44,6 @@ void actionQueueInit(actionQueue_t *q, Timer_t *timer, msgType_t stepMsgType, ms
 {
     q->tail = 0;
     q->head = 0;
-    // q->flag = 0;
     
     q->stepMsgType = stepMsgType;  
     q->overMsgType = overMsgType;
@@ -65,7 +63,6 @@ int actionQueueIn(actionQueue_t *q, action_t *action)
     q->buf[q->tail].actionType = action->actionType;
     q->buf[q->tail].actionTime = action->actionTime;
     q->buf[q->tail].actionPara = action->actionPara;
-    //q->buf[q->tail].func       = action->func;
     q->tail = (q->tail + 1) % (MTABSIZE(q->buf));
  
     return TRUE;
@@ -80,7 +77,6 @@ int actionQueueOut(actionQueue_t *q, action_t *action)
     action->actionType = q->buf[q->head].actionType;
     action->actionTime = q->buf[q->head].actionTime;
     action->actionPara = q->buf[q->head].actionPara;
-    //action->func       = q->buf[q->head].func;
     
     q->head = (q->head + 1) % (MTABSIZE(q->buf));
        

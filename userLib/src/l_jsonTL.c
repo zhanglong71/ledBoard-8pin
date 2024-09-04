@@ -200,20 +200,6 @@ void rgb2ActLedBattery3Level(void)
     // g_led_display.level = color->green;
 }
 
-#if 0
-Quintuple_u8u8u8u8u8ptr_t rgbtim2ActArr[] = {
- /** red,  green, blue, time **/
-    {0,   200,   0,    0,  rgb2ActLedStandard},       // standard, charge complete
-    {0,   100,   0,    0,  rgb2ActLedHighPower},      // high power
-    {0,   250,   0,    5,  rgb2ActLedCharging},       // charging
-    {0,   200,   0,    5,  rgb2ActLedCharging},       // charging
-    {200, 0,     200,  5,  rgb2ActLedClean},          // clean
-    {0,   101,   0,    1,  rgb2ActLedChargeStop},     // charge stop(display volate level)
-    {0,   0,     0,    0,  rgb2ActAllLedOff},         // all Led off
-    {200, 0,     0,    50, rgb2ActLedFault},          // fault
-};
-#endif
-
 Color2action_t rgbtim2ActArr[] = {
  /** red,  green, blue, time **/
     {CCOLOR_STANDARD,      {0,   200,   0,    0},  rgb2ActLedStandard},       // standard, charge complete
@@ -221,9 +207,9 @@ Color2action_t rgbtim2ActArr[] = {
     {CCOLOR_CHARGING,      {0,   250,   0,    5},  rgb2ActLedCharging},       // charging
     {CCOLOR_CHARGING2,     {0,   200,   0,    5},  rgb2ActLedCharging},       // charging
     {CCOLOR_CLEAN,         {200, 0,     200,  5},  rgb2ActLedClean},          // clean
-    {CCOLOR_BATTERY0LEVEL, {0,   0,     0,    1},  rgb2ActLedBattery0Level},     // charge stop(display 0 level)
-    {CCOLOR_BATTERY1LEVEL, {0,   1,     0,    1},  rgb2ActLedBattery1Level},     // charge stop(display 1 level)
-    {CCOLOR_BATTERY2LEVEL, {0,   2,     0,    1},  rgb2ActLedBattery2Level},     // charge stop(display 2 level)
+    {CCOLOR_BATTERY0LEVEL, {0,   0,     0,    1},  rgb2ActLedBattery0Level},  // charge stop(display 0 level)
+    {CCOLOR_BATTERY1LEVEL, {0,   1,     0,    1},  rgb2ActLedBattery1Level},  // charge stop(display 1 level)
+    {CCOLOR_BATTERY2LEVEL, {0,   2,     0,    1},  rgb2ActLedBattery2Level},  // charge stop(display 2 level)
     {CCOLOR_BATTERY3LEVEL, {0,   3,     0,    1},  rgb2ActLedBattery3Level},  // charge stop(display 3 level)
     {CCOLOR_ALLOFF,        {0,   0,     0,    0},  rgb2ActLedAllOff},         // all Led off
     {CCOLOR_FAULT,         {200, 0,     0,    50}, rgb2ActLedFault},          // fault

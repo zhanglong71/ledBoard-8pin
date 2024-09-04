@@ -21,23 +21,7 @@ void SetTimer_irq(Timer_t * timer, int tick, msgType_t msgType);
 
 void ClrTimer(Timer_t * timer);
 void ClrTimer_irq(Timer_t * timer);
-#if 0
-void delay(int __ms);
-void delaySpin(u32 _loop);
-void delaySpin_us(u32 _us);
-void delaySpin_ms(u32 _ms);
-//void delaySpinMs(void);
 
-void atomic_set(short *_var, short _value);
-short atomic_get(short *_var);
-
-void adcSample_Init(adcData_t *adcData, Timer_t *timer, msgType_t stepMsgType, int tick);
-int adcSample_In(adcData_t *adcData, u16 __value);
-int adcSample_Out(adcData_t *adcData, u16 *__average);
-#endif
-
-//void actionQueueInit(actionQueue_t *q);
-//void actionQueueInit(actionQueue_t *q, Timer_t *timer, msgType_t msgType);
 void actionQueueInit(actionQueue_t *q, Timer_t *timer, msgType_t stepMsgType, msgType_t overMsgType);
 int actionQueueIn(actionQueue_t *q, action_t *action);
 int actionQueueOut(actionQueue_t *q, action_t *action);

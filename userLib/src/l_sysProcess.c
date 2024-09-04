@@ -117,29 +117,42 @@ int sysProcess(void *pMsg)
         break;
 
     case CMSG_LEDALLOFF:     /** all led off **/
+        ledChargeStatus_set(CLED_BATLEVEL_OFF);
         ledAlloff();
         break;
+        
     case CMSG_LEDACTOFF:
-        ledAlloff();
+        ledActoff();
         break;
     case CMSG_LEDFAULT:      /** fault director**/
+        led9_12_bias_on();
         faultMode();
+        ledChargeStatus_set(CLED_BATLEVEL_LEVEL);
         break;
     case CMSG_LEDSTANDARD:   /** standard mode director**/
+        led9_12_bias_on();
         standardMode();
+        ledChargeStatus_set(CLED_BATLEVEL_LEVEL);
         break;
     case CMSG_LEDHIGHPOWER:  /** highpower mode director**/
+        led9_12_bias_on();
         highpowerMode();
+        ledChargeStatus_set(CLED_BATLEVEL_LEVEL);
         break;
     case CMSG_LEDCLEAN:      /** clean mode director**/
+        led9_12_bias_on();
         cleanMode();
+        ledChargeStatus_set(CLED_BATLEVEL_ANIMATION);
         break;
     case CMSG_LEDCHARGEING:     /** clean mode director**/
+        led9_12_bias_on();
         ledActoff();
-        ledChargeStart(TIMER_600MS);
+        ledChargeStatus_set(CLED_BATLEVEL_ANIMATION);
         break;
     case CMSG_LEDCHARGESTOP:
-        ledChargeStop();
+        led9_12_bias_on();
+        ledActoff();
+        ledChargeStatus_set(CLED_BATLEVEL_LEVEL);
         break;
 
     default:

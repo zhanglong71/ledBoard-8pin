@@ -24,22 +24,21 @@ int f_idle(void *pMsg)
         g_tick++;
 
         g_led_display.level = batteryVoltage2percent();  /** note: g_led_display.level update by master STOP CHARGING CMD either **/
-        if (g_led_display.level < 1) {
-            if (g_componentStatus.charge == CINDEX_UNCHARGED) {
-                generateAskstatus();
-                charging_animation_blink();
-            }
-        } else {
-            if (g_componentStatus.charge != CINDEX_CHARGING) {
-                u8 tmp = g_tick % CREPORT_PERIOD;
-                if (tmp == 3) {
+        if (g_componentStatus.ledStatus != CCOLOR_ALLOFF) { // adjust battery level display only
+            if (g_led_display.level < 1) {
+                if (g_componentStatus.charge == CINDEX_UNCHARGED) {
                     generateAskstatus();
-                } else if (tmp == 4) {
-                    dispBatteryLevel(g_led_display.level);
+                    ledChargeStatus_set(CLED_BATLEVEL_BLINK);
                 }
             } else {
-                if (g_componentStatus.ledStatus == CCOLOR_ALLOFF) {
-                    ledAlloff();
+                if (g_componentStatus.charge != CINDEX_CHARGING) {
+                    u8 tmp = g_tick % CREPORT_PERIOD;
+                    if (tmp == 3) {
+                        generateAskstatus();
+                    } else if (tmp == 4) {
+                        //dispBatteryLevel();
+                        ledChargeStatus_set(CLED_BATLEVEL_LEVEL);
+                    }
                 }
             }
         }
@@ -48,6 +47,7 @@ int f_idle(void *pMsg)
     case CMSG_INIT:
         g_tick = 0;
         SetTimer_irq(&g_timer[0], TIMER_1SEC, CMSG_TMR);
+        ledChargeStatus_set(CLED_BATLEVEL_INIT);
 	    break;
           
     case CPMT_OVER:
@@ -67,11 +67,7 @@ int f_init(void *pMsg)
     msg_t msg;
     RetStatus retStatus;
     switch(((msg_t *)pMsg)->msgType) 
-    {
-    case CMSG_TMR:
-        g_tick++;
-        break;
-        
+    {   
     case CSYS_INIT:        // step1
         /* Configure clock GPIO, UARTs */
         RCC_Configuration4uart();
@@ -88,10 +84,10 @@ int f_init(void *pMsg)
         SysTick_Config(SystemCoreClock / 100);       // 10ms
         TIM_Config();
         GPIO_init4led();
-        GPIO_initVOPPort();
+        // GPIO_initVOPPort();
         GPIO_init485();
-        vp_init();
         /*********************************/
+        vp_init();
         promptInit();
         rs485Init();
         ledChargeinit();
@@ -114,7 +110,6 @@ int f_init(void *pMsg)
  
     case CSYS_INITS1:      // step2
         vp_setDefaultVolume();
-        vp_stor(vopIdx_standard);
         SetTimer_irq(&g_timer[0], TIMER_100MS, CSYS_INITS2);
         break;
     case CSYS_INITS2:      // step3

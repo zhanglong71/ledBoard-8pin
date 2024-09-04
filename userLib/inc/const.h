@@ -44,6 +44,7 @@
 #define TIMER_SELFCLEAN (TIMER_10MS * 10)  /** specified period for self-cleaning **/
 
 #define TIMER_200MS (TIMER_10MS * 20)
+#define TIMER_400MS (TIMER_10MS * 40)
 #define TIMER_600MS (TIMER_10MS * 60)
 #define TIMER_800MS (TIMER_10MS * 80)
 #define TIMER_1SEC  (TIMER_10MS * 100)
@@ -52,6 +53,7 @@
 #define TIMER_3SEC  (TIMER_10MS * 300)
 #define TIMER_5SEC  (TIMER_10MS * 500)
 #define TIMER_10SEC (TIMER_10MS * 1000)
+#define TIMER_30SEC (TIMER_10MS * 3000)
 /*******************************************************************************/
 #define TIMER_50US 	1		/** about 16Khz(62.6us) **/
 
@@ -81,6 +83,14 @@
 #define CCOLOR_BATTERY3LEVEL       (10)
 #define CCOLOR_FAULT               (11)
 /*******************************************************************************/
+#define CLED_BATLEVEL_NONE         (0)
+#define CLED_BATLEVEL_INIT         (1)
+#define CLED_BATLEVEL_OFF          (2)
+#define CLED_BATLEVEL_LEVEL        (3)
+#define CLED_BATLEVEL_BLINK        (4)
+#define CLED_BATLEVEL_ANIMATION    (5)
+/*******************************************************************************/
+
 #define CCR4_Val (40961)
 #define CCR3_Val (27309)
 //#define CCR2_Val (350)  // 17.11KHz
